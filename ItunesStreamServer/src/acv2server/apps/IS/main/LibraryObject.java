@@ -7,6 +7,13 @@ package acv2server.apps.IS.main;
  */
 public class LibraryObject {
 
-	
+	/**
+	 * 
+	 * @param filename The location of the Itunes Music Library xml file
+	 */
+	public LibraryObject(String filename)
+	{
+		
+	}
 	
 }
