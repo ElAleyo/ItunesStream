@@ -50,8 +50,8 @@ public class LibraryObject {
 		
 		while(sc.hasNext())
 		{
-			li = new LibraryItem(sc.next());
-			this.imlItems.put(li.getKey(), li);
+			li = new LibraryItem(sc.next());    // Create library Item for this item
+			this.imlItems.put(li.getKey(), li); // Save the item in the map and use the Key assigned by itunes as the key value in the map
 		}
 		sc.close();
 	}
