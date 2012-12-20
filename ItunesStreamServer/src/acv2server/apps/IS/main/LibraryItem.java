@@ -65,17 +65,6 @@ public class LibraryItem {
 	}
 
 	/**
-	 * Verifies that the item given as parameter to the constructor is structured in a correct way.
-	 * @param item the item as it appears in the Itunes Music Libaray.xml file
-	 * @return true if it's valid, false if it's not.
-	 */
-	private boolean isValid(String item)
-	{
-		//TODO
-		return true;
-	}
-	
-	/**
 	 * This methods extracts the Key for this item. If it can't extract the Key null is
 	 * assigned to Key 
 	 */
@@ -83,7 +72,7 @@ public class LibraryItem {
 	{
 		//TODO
 	}
-	
+
 	/**
 	 * This method extracts the Location of this item. If it can't extract the Location null is
 	 * assigned to location 
@@ -92,7 +81,7 @@ public class LibraryItem {
 	{
 		//TODO
 	}
-	
+
 	/**
 	 * This method extracts the Name of this item. If it can't extract the name null is
 	 * assigned to name
@@ -102,5 +91,15 @@ public class LibraryItem {
 		//TODO
 	}
 
+	/**
+	 * Verifies that the item given as parameter to the constructor is structured in a correct way.
+	 * @param item the item as it appears in the Itunes Music Libaray.xml file
+	 * @return true if it's valid, false if it's not.
+	 */
+	private boolean isValid(String item)
+	{
+		//TODO
+		return true;
+	}
 }
 
