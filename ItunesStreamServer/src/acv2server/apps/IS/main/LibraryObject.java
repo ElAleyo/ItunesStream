@@ -37,6 +37,15 @@ public class LibraryObject {
 			throw new FileNotFoundException("File "+filename+" was not found");
 		
 	}
+	
+	/**
+	 * 
+	 */
+	public void print()
+	{
+		
+	}
+	
 	/**
 	 * This methods takes the file and populates the Map 
 	 * @throws FileNotFoundException 

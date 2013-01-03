@@ -14,6 +14,7 @@ public class Tester {
 		//LibraryObject l = new LibraryObject("C:\\Users\\jose\\Music\\iTunes\\iTunes Music Library.xml");
 		//LibraryObject l = new LibraryObject("C:\\Users\\jose\\Desktop\\t.txt");
 		LibraryObject l = new LibraryObject("/Users/jose/Music/iTunes/iTunes Music Library.xml");
+		l.print();
 	}
 
 }

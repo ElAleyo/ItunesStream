@@ -79,6 +79,12 @@ public class LibraryItem {
 	private void extractKey(String item)
 	{
 		//TODO
+		p = Pattern.compile("<key>Track ID</key><integer>[0-9]+</integer>");
+	    m = p.matcher(item);
+	    m.find();
+	    String temp = m.group();
+	    temp = temp.substring(28, temp.indexOf("</string"));
+	    this.name = temp;
 	}
 
 	/**
@@ -87,7 +93,18 @@ public class LibraryItem {
 	 */
 	private void extractLocation(String item)
 	{
-		//TODO
+		p = Pattern.compile("<key>Location</key><string>[a-zA-Z].+</string>");
+	    m = p.matcher(item);
+	    String temp;
+	    if(m.find())
+	    {	
+	    	temp = m.group();
+	    	temp = temp.substring(27, temp.indexOf("</string"));
+	    }
+	    //If no match for location is found then the track is found online 
+	    else
+	    	temp = "ONLINE";
+	    this.name = temp;
 	}
 
 	/**
