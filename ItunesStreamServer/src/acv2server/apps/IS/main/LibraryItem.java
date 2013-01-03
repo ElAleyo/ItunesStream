@@ -83,7 +83,7 @@ public class LibraryItem {
 	    m = p.matcher(item);
 	    m.find();
 	    String temp = m.group();
-	    temp = temp.substring(28, temp.indexOf("</string"));
+	    temp = temp.substring(28, temp.indexOf("</integer"));
 	    this.name = temp;
 	}
 
