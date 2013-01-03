@@ -4,6 +4,7 @@ package acv2server.apps.IS.main;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
@@ -47,9 +48,23 @@ public class ItunesLibrary {
 
 	}
 
+	/**
+	 * This method iterates over all the items in this Library and populates a list with
+	 * all the songs in the Library. 
+	 * @return A list of songs contained in this library 
+	 */
 	public String getSongList()
 	{
 		LinkedList<String> songList = new LinkedList<String>();
+		
+		Iterator<LibraryItem> it = this.imlItems.values().iterator();
+		LibraryItem li;
+		while(it.hasNext())
+		{
+			li = it.next();
+			if(li.isSong())
+				songList.add(li.getName());
+		}
 		
 		return null;
 	}

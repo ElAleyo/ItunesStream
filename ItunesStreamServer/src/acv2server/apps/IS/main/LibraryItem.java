@@ -37,6 +37,7 @@ public class LibraryItem {
 			this.extractKey(item);
 			this.extractLocation(item);
 			this.extractName(item);
+			this.checkIfSong(item);
 		}
 		else
 		{
@@ -130,6 +131,17 @@ public class LibraryItem {
 	    this.name = temp;
 	}
 
+	/**
+	 * Checks if this item has a valid Kind (different audio or video formats)
+	 * @param item
+	 */
+	private void checkIfSong(String item)
+	{
+		p = Pattern.compile("<key>Kind</key><string>[a-zA-Z].+</string>");
+		m = p.matcher(item);
+		m.find();
+	}
+	
 	/**
 	 * Verifies that the item given as parameter to the constructor is structured in a correct way.
 	 * @param item the item as it appears in the Itunes Music Libaray.xml file
