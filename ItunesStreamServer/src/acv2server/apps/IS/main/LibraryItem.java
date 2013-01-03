@@ -78,7 +78,6 @@ public class LibraryItem {
 	 */
 	private void extractKey(String item)
 	{
-		//TODO
 		p = Pattern.compile("<key>Track ID</key><integer>[0-9]+</integer>");
 	    m = p.matcher(item);
 	    m.find();

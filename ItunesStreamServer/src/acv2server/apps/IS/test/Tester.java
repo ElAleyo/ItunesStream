@@ -2,7 +2,7 @@ package acv2server.apps.IS.test;
 
 import java.io.FileNotFoundException;
 
-import acv2server.apps.IS.main.LibraryObject;
+import acv2server.apps.IS.main.ItunesLibrary;
 
 public class Tester {
 
@@ -13,7 +13,7 @@ public class Tester {
 	public static void main(String[] args) throws FileNotFoundException {
 		//LibraryObject l = new LibraryObject("C:\\Users\\jose\\Music\\iTunes\\iTunes Music Library.xml");
 		//LibraryObject l = new LibraryObject("C:\\Users\\jose\\Desktop\\t.txt");
-		LibraryObject l = new LibraryObject("/Users/jose/Music/iTunes/iTunes Music Library.xml");
+		ItunesLibrary l = new ItunesLibrary("/Users/jose/Music/iTunes/iTunes Music Library.xml");
 		l.print();
 	}
 

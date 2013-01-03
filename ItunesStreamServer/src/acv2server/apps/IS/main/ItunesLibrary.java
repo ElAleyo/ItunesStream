@@ -12,7 +12,7 @@ import java.util.Scanner;
  * @author Jose
  *
  */
-public class LibraryObject {
+public class ItunesLibrary {
 
 	private Map<Integer, LibraryItem> imlItems;
 	private File file; 
@@ -21,7 +21,7 @@ public class LibraryObject {
 	 * @param filename The location of the Itunes Music Library xml file
 	 * @throws FileNotFoundException 
 	 */
-	public LibraryObject(String filename) throws FileNotFoundException
+	public ItunesLibrary(String filename) throws FileNotFoundException
 	{		
 		//Initialize fields		
 		this.file = new File(filename);
@@ -53,7 +53,6 @@ public class LibraryObject {
 	private void parseFile() throws FileNotFoundException {
 	
 		Scanner sc = new Scanner(file );
-		//Pattern p = Pattern.compile("<key>[0-9]+</key>\\s<dict>*</dict>");
 		sc.useDelimiter("<key>[0-9]+</key>");
 		LibraryItem li;
 		
