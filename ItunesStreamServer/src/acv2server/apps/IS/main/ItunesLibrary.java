@@ -62,7 +62,7 @@ public class ItunesLibrary {
 		while(it.hasNext())
 		{
 			li = it.next();
-			if(li.isSong())
+			if(li.isSong() && !li.getLocation().equals("ONLINE"))
 				songList.add(li.getName());
 		}
 		

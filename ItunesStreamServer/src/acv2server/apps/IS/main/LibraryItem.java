@@ -21,7 +21,7 @@ public class LibraryItem {
 	private Integer key;
 	private String name;
 	private boolean isSong;
-	
+
 	private Pattern p;
 	private Matcher m;
 
@@ -73,7 +73,7 @@ public class LibraryItem {
 	{
 		return this.name;
 	}
-	
+
 	/**
 	 * Checks whether this item is a song or other type. 
 	 * @return true if this item is a song
@@ -82,7 +82,7 @@ public class LibraryItem {
 	{
 		return this.isSong;
 	}
-	
+
 	/**
 	 * This methods extracts the Key for this item. If it can't extract the Key null is
 	 * assigned to Key 
@@ -90,11 +90,11 @@ public class LibraryItem {
 	private void extractKey(String item)
 	{
 		p = Pattern.compile("<key>Track ID</key><integer>[0-9]+</integer>");
-	    m = p.matcher(item);
-	    m.find();
-	    String temp = m.group();
-	    temp = temp.substring(28, temp.indexOf("</integer"));
-	    this.name = temp;
+		m = p.matcher(item);
+		m.find();
+		String temp = m.group();
+		temp = temp.substring(28, temp.indexOf("</integer"));
+		this.name = temp;
 	}
 
 	/**
@@ -104,17 +104,17 @@ public class LibraryItem {
 	private void extractLocation(String item)
 	{
 		p = Pattern.compile("<key>Location</key><string>[a-zA-Z].+</string>");
-	    m = p.matcher(item);
-	    String temp;
-	    if(m.find())
-	    {	
-	    	temp = m.group();
-	    	temp = temp.substring(27, temp.indexOf("</string"));
-	    }
-	    //If no match for location is found then the track is found online 
-	    else
-	    	temp = "ONLINE";
-	    this.name = temp;
+		m = p.matcher(item);
+		String temp;
+		if(m.find())
+		{	
+			temp = m.group();
+			temp = temp.substring(27, temp.indexOf("</string"));
+		}
+		//If no match for location is found then the track is found online 
+		else
+			temp = "ONLINE";
+		this.name = temp;
 	}
 
 	/**
@@ -124,24 +124,30 @@ public class LibraryItem {
 	private void extractName(String item)
 	{
 		p = Pattern.compile("<key>Name</key><string>[a-zA-Z].+</string>");
-	    m = p.matcher(item);
-	    m.find();
-	    String temp = m.group();
-	    temp = temp.substring(23, temp.indexOf("</string"));
-	    this.name = temp;
+		m = p.matcher(item);
+		m.find();
+		String temp = m.group();
+		temp = temp.substring(23, temp.indexOf("</string"));
+		this.name = temp;
 	}
 
 	/**
 	 * Checks if this item has a valid Kind (different audio or video formats)
-	 * @param item
+	 * @param item the item as it appears in the Itunes Music Libaray.xml file
 	 */
 	private void checkIfSong(String item)
 	{
 		p = Pattern.compile("<key>Kind</key><string>[a-zA-Z].+</string>");
 		m = p.matcher(item);
 		m.find();
+		String temp = m.group();
+		temp = temp.substring(23, temp.indexOf("</string"));
+		if(this.validSongKind(temp))
+			this.isSong = true;
+		else
+			this.isSong = false;
 	}
-	
+
 	/**
 	 * Verifies that the item given as parameter to the constructor is structured in a correct way.
 	 * @param item the item as it appears in the Itunes Music Libaray.xml file
@@ -152,6 +158,22 @@ public class LibraryItem {
 		p = Pattern.compile("<key>Track ID</key><integer>[0-9]+</integer>");
 		m = p.matcher(item);
 		return m.find();
+	}
+
+	/**
+	 * This method checks for the <key>Kind</key>. If it contains a valid music format
+	 * then it returns true.
+	 * @return true if this item is a valid song, false otherwise 
+	 */
+	private boolean validSongKind(String songKind)
+	{
+		if(songKind.equals("MPEG audio file"))
+			return true;
+		else if(songKind.equals("Purchased AAC audio file"))
+			return true;
+
+		else
+			return false;
 	}
 }
 
