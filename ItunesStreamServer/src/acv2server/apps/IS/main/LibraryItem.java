@@ -48,7 +48,7 @@ public class LibraryItem {
 
 	/**
 	 * Returns the key that iTunes assigns to its songs
-	 * @return the key assigned by Itunes. If the value is null then this item is not a 
+	 * @return the key assigned by iTunes. If the value is null then this item is not a 
 	 * valid one
 	 */
 	public Integer getKey()
@@ -123,7 +123,8 @@ public class LibraryItem {
 	 */
 	private void extractName(String item)
 	{
-		p = Pattern.compile("<key>Name</key><string>[a-zA-Z].+</string>");
+		//TODO
+		p = Pattern.compile("<key>Name</key><string></string>");
 		m = p.matcher(item);
 		m.find();
 		String temp = m.group();

@@ -53,7 +53,7 @@ public class ItunesLibrary {
 	 * all the songs in the Library. 
 	 * @return A list of songs contained in this library 
 	 */
-	public String getSongList()
+	public LinkedList<String> getSongList()
 	{
 		LinkedList<String> songList = new LinkedList<String>();
 		
@@ -66,7 +66,7 @@ public class ItunesLibrary {
 				songList.add(li.getName());
 		}
 		
-		return null;
+		return songList;
 	}
 
 	/*--------------------------------------------------------*/

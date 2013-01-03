@@ -15,6 +15,9 @@ public class Tester {
 		//LibraryObject l = new LibraryObject("C:\\Users\\jose\\Desktop\\t.txt");
 		ItunesLibrary l = new ItunesLibrary("/Users/jose/Music/iTunes/iTunes Music Library.xml");
 		l.print();
+		for(String str : l.getSongList())
+			System.out.println(str);
+
 	}
 
 }
