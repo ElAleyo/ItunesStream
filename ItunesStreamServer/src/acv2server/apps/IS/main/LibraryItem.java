@@ -20,6 +20,7 @@ public class LibraryItem {
 	private String location;
 	private Integer key;
 	private String name;
+	private boolean isSong;
 	
 	private Pattern p;
 	private Matcher m;
@@ -71,7 +72,16 @@ public class LibraryItem {
 	{
 		return this.name;
 	}
-
+	
+	/**
+	 * Checks whether this item is a song or other type. 
+	 * @return true if this item is a song
+	 */
+	public boolean isSong()
+	{
+		return this.isSong;
+	}
+	
 	/**
 	 * This methods extracts the Key for this item. If it can't extract the Key null is
 	 * assigned to Key 

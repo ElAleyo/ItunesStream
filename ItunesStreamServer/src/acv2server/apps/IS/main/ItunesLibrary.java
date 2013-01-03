@@ -4,6 +4,7 @@ package acv2server.apps.IS.main;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -26,36 +27,45 @@ public class ItunesLibrary {
 		//Initialize fields		
 		this.file = new File(filename);
 		this.imlItems = new HashMap<Integer, LibraryItem>();
-		
+
 		//Check if file exists
 		if(file.exists())
 		{
 			this.parseFile();
 		}
-		
+
 		else
 			throw new FileNotFoundException("File "+filename+" was not found");
-		
+
 	}
-	
+
 	/**
 	 * 
 	 */
 	public void print()
 	{
-		
+
 	}
-	
+
+	public String getSongList()
+	{
+		LinkedList<String> songList = new LinkedList<String>();
+		
+		return null;
+	}
+
+	/*--------------------------------------------------------*/
+
 	/**
 	 * This methods takes the file and populates the Map 
 	 * @throws FileNotFoundException 
 	 */
 	private void parseFile() throws FileNotFoundException {
-	
+
 		Scanner sc = new Scanner(file );
 		sc.useDelimiter("<key>[0-9]+</key>");
 		LibraryItem li;
-		
+
 		while(sc.hasNext())
 		{
 			li = new LibraryItem(sc.next());    // Create library Item for this item
@@ -64,6 +74,5 @@ public class ItunesLibrary {
 		sc.close();
 	}
 }
-	
-	
-	
+
+
