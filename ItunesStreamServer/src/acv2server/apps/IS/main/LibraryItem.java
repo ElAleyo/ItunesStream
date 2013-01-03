@@ -1,5 +1,10 @@
 package acv2server.apps.IS.main;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+
+
 /**
  * This class represents a Song in the library.
  * The data we use for now is:
@@ -15,6 +20,9 @@ public class LibraryItem {
 	private String location;
 	private Integer key;
 	private String name;
+	
+	private Pattern p;
+	private Matcher m;
 
 	/**
 	 * In this constructor we parse through the string given as parameter 
@@ -25,9 +33,9 @@ public class LibraryItem {
 	{
 		if(this.isValid(item))
 		{
-			this.extractKey();
-			this.extractLocation();
-			this.extractName();
+			this.extractKey(item);
+			this.extractLocation(item);
+			this.extractName(item);
 		}
 		else
 		{
@@ -68,7 +76,7 @@ public class LibraryItem {
 	 * This methods extracts the Key for this item. If it can't extract the Key null is
 	 * assigned to Key 
 	 */
-	private void extractKey()
+	private void extractKey(String item)
 	{
 		//TODO
 	}
@@ -77,7 +85,7 @@ public class LibraryItem {
 	 * This method extracts the Location of this item. If it can't extract the Location null is
 	 * assigned to location 
 	 */
-	private void extractLocation()
+	private void extractLocation(String item)
 	{
 		//TODO
 	}
@@ -86,9 +94,14 @@ public class LibraryItem {
 	 * This method extracts the Name of this item. If it can't extract the name null is
 	 * assigned to name
 	 */
-	private void extractName()
+	private void extractName(String item)
 	{
-		//TODO
+		p = Pattern.compile("<key>Name</key><string>[a-zA-Z].+</string>");
+	    m = p.matcher(item);
+	    m.find();
+	    String temp = m.group();
+	    temp = temp.substring(23, temp.indexOf("</string"));
+	    this.name = temp;
 	}
 
 	/**
@@ -98,8 +111,9 @@ public class LibraryItem {
 	 */
 	private boolean isValid(String item)
 	{
-		//TODO
-		return true;
+		p = Pattern.compile("<key>Track ID</key><integer>[0-9]+</integer>");
+		m = p.matcher(item);
+		return m.find();
 	}
 }
 
