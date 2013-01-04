@@ -94,7 +94,7 @@ public class LibraryItem {
 		m.find();
 		String temp = m.group();
 		temp = temp.substring(28, temp.indexOf("</integer"));
-		this.name = temp;
+		this.key = Integer.valueOf(temp);
 	}
 
 	/**
@@ -103,18 +103,18 @@ public class LibraryItem {
 	 */
 	private void extractLocation(String item)
 	{
-		p = Pattern.compile("<key>Location</key><string>[a-zA-Z].+</string>");
+		p = Pattern.compile("<key>Track Type</key><string>Remote</string>");
 		m = p.matcher(item);
 		String temp;
-		if(m.find())
+		if(!m.find())
 		{	
-			temp = m.group();
-			temp = temp.substring(27, temp.indexOf("</string"));
+			temp = item.substring(item.indexOf("<key>Location</key><string>")+27, item.length() );
+			temp = temp.substring(0, temp.indexOf("</string>"));
 		}
 		//If no match for location is found then the track is found online 
 		else
 			temp = "ONLINE";
-		this.name = temp;
+		this.location = temp;
 	}
 
 	/**
@@ -123,8 +123,7 @@ public class LibraryItem {
 	 */
 	private void extractName(String item)
 	{
-		//TODO
-		p = Pattern.compile("<key>Name</key><string></string>");
+		p = Pattern.compile("<key>Name</key><string>[a-zA-Z].+</string>");
 		m = p.matcher(item);
 		m.find();
 		String temp = m.group();

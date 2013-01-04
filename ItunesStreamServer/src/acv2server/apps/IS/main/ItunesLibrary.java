@@ -41,11 +41,24 @@ public class ItunesLibrary {
 	}
 
 	/**
-	 * 
+	 * This method iterates over the Library looking and formats all the songs in a string 
+	 * of the following form: Key ; song name ; song location.  
+	 * @return returns the songs found on this Library
 	 */
-	public void print()
+	public LinkedList<String> print()
 	{
-
+		LinkedList<String> items = new LinkedList<String>();
+		Iterator<LibraryItem> it = this.imlItems.values().iterator();
+		LibraryItem li;
+		String temp;
+		while(it.hasNext())
+		{
+			li = it.next();
+			temp = li.getKey() + " ; "+  li.getName() +" ; "+ li.getLocation() ;
+			items.add(temp);
+		}
+		
+		return items;
 	}
 
 	/**
@@ -62,13 +75,16 @@ public class ItunesLibrary {
 		while(it.hasNext())
 		{
 			li = it.next();
+			//if this item is a song and it's not a remote one (found online) add it to the list 
 			if(li.isSong() && !li.getLocation().equals("ONLINE"))
 				songList.add(li.getName());
 		}
 		
 		return songList;
 	}
+	
 
+	
 	/*--------------------------------------------------------*/
 
 	/**
