@@ -123,11 +123,14 @@ public class LibraryItem {
 	 */
 	private void extractName(String item)
 	{
-		p = Pattern.compile("<key>Name</key><string>[a-zA-Z].+</string>");
+		p = Pattern.compile("<key>Name</key><string>[a-zA-Z0-9].+</string>");
 		m = p.matcher(item);
-		m.find();
-		String temp = m.group();
-		temp = temp.substring(23, temp.indexOf("</string"));
+		String temp = "no name";
+		if(m.find())
+		{
+			temp = m.group();
+			temp = temp.substring(23, temp.indexOf("</string"));
+		}
 		this.name = temp;
 	}
 
@@ -139,9 +142,12 @@ public class LibraryItem {
 	{
 		p = Pattern.compile("<key>Kind</key><string>[a-zA-Z].+</string>");
 		m = p.matcher(item);
-		m.find();
-		String temp = m.group();
-		temp = temp.substring(23, temp.indexOf("</string"));
+		String temp = "unknown type";
+		if(m.find())
+		{
+			temp = m.group();
+			temp = temp.substring(23, temp.indexOf("</string"));
+		}
 		if(this.validSongKind(temp))
 			this.isSong = true;
 		else
@@ -172,6 +178,8 @@ public class LibraryItem {
 		else if(songKind.equals("Purchased AAC audio file"))
 			return true;
 
+		else if(songKind.equals("unknown type"))
+			return false;
 		else
 			return false;
 	}
