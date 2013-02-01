@@ -123,31 +123,27 @@ public class LibraryItem {
 	 */
 	private void extractName(String item)
 	{
-		p = Pattern.compile("<key>Name</key><string>[a-zA-Z0-9].+</string>");
+		p = Pattern.compile("<key>Name</key><string>(.*?)</string>", Pattern.DOTALL);
 		m = p.matcher(item);
 		String temp = "no name";
 		if(m.find())
-		{
-			temp = m.group();
-			temp = temp.substring(23, temp.indexOf("</string"));
-		}
+			temp = m.group(1);
+
 		this.name = temp;
 	}
 
 	/**
 	 * Checks if this item has a valid Kind (different audio or video formats)
-	 * @param item the item as it appears in the Itunes Music Libaray.xml file
+	 * @param item the item as it appears in the iTunes Music Libaray.xml file
 	 */
 	private void checkIfSong(String item)
 	{
-		p = Pattern.compile("<key>Kind</key><string>[a-zA-Z].+</string>");
+		p = Pattern.compile("<key>Kind</key><string>(.*?)</string>");
 		m = p.matcher(item);
-		String temp = "unknown type";
+		String temp="";
 		if(m.find())
-		{
-			temp = m.group();
-			temp = temp.substring(23, temp.indexOf("</string"));
-		}
+			temp = m.group(1);
+
 		if(this.validSongKind(temp))
 			this.isSong = true;
 		else
@@ -178,10 +174,10 @@ public class LibraryItem {
 		else if(songKind.equals("Purchased AAC audio file"))
 			return true;
 
-		else if(songKind.equals("unknown type"))
+		else{
+			System.out.println("Unkwon Type: -"+songKind+"- for item: "+ this.name);
 			return false;
-		else
-			return false;
+		}
 	}
 }
 
