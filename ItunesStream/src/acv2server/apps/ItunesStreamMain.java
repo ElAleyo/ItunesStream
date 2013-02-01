@@ -1,5 +1,7 @@
 package acv2server.apps;
 
+import acv2server.apps.online.Task;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
@@ -10,6 +12,9 @@ public class ItunesStreamMain extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itunes_stream_main);
+        
+        AsyncTask<String, String, String> t = new Task();
+        t.execute("none");
     }
 
     @Override
