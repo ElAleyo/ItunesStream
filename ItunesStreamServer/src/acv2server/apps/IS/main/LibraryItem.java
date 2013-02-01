@@ -1,5 +1,7 @@
 package acv2server.apps.IS.main;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -113,7 +115,14 @@ public class LibraryItem {
 		//p = Pattern.compile("<key>Track Type</key><string>Remote</string>");
 		else
 			temp = "ONLINE";
-		this.location = temp;
+		try {
+			URI test = new URI(temp);
+			this.location = test.getPath();
+		} catch (URISyntaxException e) {
+			System.out.println("Error on: "+this.name );
+			this.location = temp;
+			e.printStackTrace();
+		}
 	}
 
 	/**

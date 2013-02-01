@@ -21,16 +21,16 @@ public class Tester {
 		//for(String str : l.getSongList())
 		//	System.out.println(str);
 		
-		
-		BufferedWriter bw = writeFileOut("/Users/joseacevedo/Desktop/output.txt");
-		
-		for (String str : l.print())
-		{
-			//System.out.println(str);
-			bw.write(str+"\n");
-		}
-		
-		bw.close();
+//		
+//		BufferedWriter bw = writeFileOut("/Users/joseacevedo/Desktop/output.txt");
+//		
+//		for (String str : l.print())
+//		{
+//			//System.out.println(str);
+//			bw.write(str+"\n");
+//		}
+//		
+//		bw.close();
 		
 	}
 	
