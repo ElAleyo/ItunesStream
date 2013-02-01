@@ -35,8 +35,8 @@ public class LibraryItem {
 		if(this.isValid(item))
 		{
 			this.extractKey(item);
-			this.extractLocation(item);
 			this.extractName(item);
+			this.extractLocation(item);
 			this.checkIfSong(item);
 		}
 		else
@@ -89,11 +89,11 @@ public class LibraryItem {
 	 */
 	private void extractKey(String item)
 	{
-		p = Pattern.compile("<key>Track ID</key><integer>[0-9]+</integer>");
+		p = Pattern.compile("<key>Track ID</key><integer>([0-9]+)</integer>");
 		m = p.matcher(item);
-		m.find();
-		String temp = m.group();
-		temp = temp.substring(28, temp.indexOf("</integer"));
+		m.find(); // This is not surrounded by an if because every song should have a key
+		String temp = m.group(1);
+
 		this.key = Integer.valueOf(temp);
 	}
 
@@ -103,15 +103,14 @@ public class LibraryItem {
 	 */
 	private void extractLocation(String item)
 	{
-		p = Pattern.compile("<key>Track Type</key><string>Remote</string>");
+		p = Pattern.compile("<key>Location</key><string>(.*?)</string>");
 		m = p.matcher(item);
 		String temp;
-		if(!m.find())
-		{	
-			temp = item.substring(item.indexOf("<key>Location</key><string>")+27, item.length() );
-			temp = temp.substring(0, temp.indexOf("</string>"));
-		}
-		//If no match for location is found then the track is found online 
+		if(m.find())
+			temp = m.group(1);
+		
+		//If no match for location is found then the track is found online or Remote as they type it.
+		//p = Pattern.compile("<key>Track Type</key><string>Remote</string>");
 		else
 			temp = "ONLINE";
 		this.location = temp;
@@ -152,7 +151,7 @@ public class LibraryItem {
 
 	/**
 	 * Verifies that the item given as parameter to the constructor is structured in a correct way.
-	 * @param item the item as it appears in the Itunes Music Libaray.xml file
+	 * @param item the item as it appears in the iTunes Music Libaray.xml file
 	 * @return true if it's valid, false if it's not.
 	 */
 	private boolean isValid(String item)
@@ -175,7 +174,7 @@ public class LibraryItem {
 			return true;
 
 		else{
-			System.out.println("Unkwon Type: -"+songKind+"- for item: "+ this.name);
+			//System.out.println("Unkwon Type: -"+songKind+"- for item: "+ this.name);
 			return false;
 		}
 	}
