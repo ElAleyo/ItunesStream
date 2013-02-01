@@ -13,7 +13,7 @@ public class ItunesStreamMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_itunes_stream_main);
         
-        AsyncTask<String, String, String> t = new Task();
+        AsyncTask<String, String, String> t = new Task(this.getApplicationContext());
         t.execute("none");
     }
 

@@ -18,8 +18,8 @@ public class Tester {
 		//LibraryObject l = new LibraryObject("C:\\Users\\jose\\Desktop\\t.txt");
 		ItunesLibrary l = new ItunesLibrary("/Users/joseacevedo/Desktop/iTunes Library.xml");
 		
-		//for(String str : l.getSongList())
-		//	System.out.println(str);
+		for(String str : l.getSongList())
+			System.out.println(str);
 		
 //		
 //		BufferedWriter bw = writeFileOut("/Users/joseacevedo/Desktop/output.txt");
