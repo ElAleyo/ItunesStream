@@ -2,17 +2,18 @@ package acv2server.apps.online;
 
 import java.io.IOException;
 
-import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class Task extends AsyncTask<String, String , String> {
 
-	private TCPClient s;
+	private TCPClient tcpClient;
 	private String temp;
 	
-	public Task(Context contex)
+	public Task(SharedPreferences prefs)
 	{
+		
 	}
 	
 	@Override
@@ -20,9 +21,10 @@ public class Task extends AsyncTask<String, String , String> {
 
 		temp ="crap";
 		try {
-			s = new TCPClient( 8888);
-			if(s.connectionReady())
-				temp = s.getSongList();
+			tcpClient = new TCPClient( 8888);
+			if(tcpClient.connectionReady())
+				temp = tcpClient.getSongList();
+			
 			else
 				Log.d("DEBUG", "Connection not ready");
 		} catch (IOException e) {
