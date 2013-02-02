@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
+import acv2server.apps.IS.online.TCPServer;
+
 public class ItunesStreamServerMain {
 
 	/**
@@ -20,11 +22,12 @@ public class ItunesStreamServerMain {
 				
 				ItunesLibrary il = new ItunesLibrary(location);
 
-				TCPServer tcp = new TCPServer(il);
-				System.out.println("server");
+				TCPServer tcp = new TCPServer(il, 8888);
+				
+				System.out.println("Server Started");
 				tcp.start();
 				tcp.close();	
-				System.out.println("close");
+				System.out.println("Server Closed");
 				
 
 			} catch (FileNotFoundException e) {

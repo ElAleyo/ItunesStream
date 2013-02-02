@@ -6,24 +6,21 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Locale;
 
-import android.content.Context;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.util.Log;
 
 public class TCPClient {
 
 	private Socket client;
 	private String data;
-	private Context context;
-
-	public TCPClient( Context context ) throws UnknownHostException, IOException
+	private int port ;
+	
+	public TCPClient( int port ) throws UnknownHostException, IOException
 	{
-		this.context = context;
-		this.availableIPs();
-		client = new Socket("192.168.1.9", 8888);
+		this.port = port;
+		BroadcastTransmitter bt = new BroadcastTransmitter(this.port);
+		String ip = bt.getIpOfServer();
+		client = new Socket(ip, this.port);
 
 	}
 
@@ -33,9 +30,9 @@ public class TCPClient {
 		DataOutputStream outToServer = new DataOutputStream(client.getOutputStream());
 		String req = "songlist_request";
 		outToServer.writeUTF(req);
-		Log.d("DEBUG", "Sent request");
+		Log.d("DEBUG", "Sent Song List Request");
 
-		ServerSocket auxS = new ServerSocket(8888); 
+		ServerSocket auxS = new ServerSocket(this.port); 
 		Socket aux = auxS.accept();
 
 		DataInputStream inFromServer = new DataInputStream(aux.getInputStream());
@@ -45,25 +42,17 @@ public class TCPClient {
 		aux.close();
 
 		this.client.close();
-		Log.d("DEBUG", "Closed");
+		Log.d("DEBUG", "Client Socket Closed");
 		return data;
 	}
 
-	private void availableIPs()  
+	/**
+	 * 
+	 * @return True if the client is connected to the server 
+	 */
+	public boolean connectionReady()
 	{
-		WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-		int ip = wifiInfo.getIpAddress();
-
-		String ipString = String.format(Locale.US,
-				"%d.%d.%d.%d",
-				(ip & 0xff),
-				(ip >> 8 & 0xff),
-				(ip >> 16 & 0xff),
-				(ip >> 24 & 0xff));
-
-		System.out.println(ipString);
-
+		return client.isConnected();
 	}
-
+	
 }

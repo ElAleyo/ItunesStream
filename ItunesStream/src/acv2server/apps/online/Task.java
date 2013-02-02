@@ -10,11 +10,9 @@ public class Task extends AsyncTask<String, String , String> {
 
 	private TCPClient s;
 	private String temp;
-	private Context context;
 	
 	public Task(Context contex)
 	{
-		context = contex;
 	}
 	
 	@Override
@@ -22,8 +20,11 @@ public class Task extends AsyncTask<String, String , String> {
 
 		temp ="crap";
 		try {
-			s = new TCPClient(context);
-			temp = s.getSongList();
+			s = new TCPClient( 8888);
+			if(s.connectionReady())
+				temp = s.getSongList();
+			else
+				Log.d("DEBUG", "Connection not ready");
 		} catch (IOException e) {
 
 			Log.d("DEBUG", "Exploto: ");
