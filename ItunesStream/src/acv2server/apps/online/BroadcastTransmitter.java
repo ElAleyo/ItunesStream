@@ -18,12 +18,14 @@ public class BroadcastTransmitter {
 
 	private DatagramSocket socket;
 	private int port;
-
-	public BroadcastTransmitter(int port) throws SocketException
+	private int responseWaitTime;
+	
+	public BroadcastTransmitter(int port, int responseWaitTime) throws SocketException
 	{
 		this.port = port;
 		this.socket = new DatagramSocket();
 		this.socket.setBroadcast(true);
+		this.responseWaitTime = responseWaitTime;
 	}
 
 	/**
@@ -38,7 +40,7 @@ public class BroadcastTransmitter {
 		byte[] requestMsg = "set_connection_packet".getBytes();
 		DatagramPacket sendRequestMsg = new DatagramPacket(requestMsg, requestMsg.length, InetAddress.getByName("255.255.255.255"), this.port);
 
-		Log.d("DEBUG", "Send Connection Request Message");
+		Log.d("DEBUG", "Send Connection Request Message on port: " +this.port );
 		socket.send(sendRequestMsg);
 
 		Log.d("DEBUG", "Connection Request Message sent");
@@ -69,7 +71,8 @@ public class BroadcastTransmitter {
 
 
 		try {
-			Thread.sleep(10000);
+			Log.d("DEBUG", "Time to wait for response: "+responseWaitTime);
+			Thread.sleep(responseWaitTime);
 		} catch (InterruptedException e) {
 			Log.d("DEBUG", "Current Thread wait error");
 			e.printStackTrace();

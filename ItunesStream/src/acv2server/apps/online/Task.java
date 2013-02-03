@@ -10,10 +10,11 @@ public class Task extends AsyncTask<String, String , String> {
 
 	private TCPClient tcpClient;
 	private String temp;
+	private SharedPreferences prefs;
 	
 	public Task(SharedPreferences prefs)
 	{
-		
+		this.prefs = prefs;
 	}
 	
 	@Override
@@ -21,7 +22,9 @@ public class Task extends AsyncTask<String, String , String> {
 
 		temp ="crap";
 		try {
-			tcpClient = new TCPClient( 8888);
+			Integer port = prefs.getInt("com_port", 8888);
+			Integer responseWaitTime = prefs.getInt("response_wait_time", 5000); 
+			tcpClient = new TCPClient( port , responseWaitTime);
 			if(tcpClient.connectionReady())
 				temp = tcpClient.getSongList();
 			

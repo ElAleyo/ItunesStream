@@ -67,5 +67,11 @@ public class TCPServer {
 		server.close();
 		welcomeSocket.close();
 	}
+	
+	public void finalize() throws IOException
+	{
+		System.out.println("Garbage collector close attempt");
+		this.close();
+	}
 }
 

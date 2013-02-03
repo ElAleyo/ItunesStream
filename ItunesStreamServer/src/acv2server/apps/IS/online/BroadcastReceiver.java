@@ -66,4 +66,9 @@ public class BroadcastReceiver {
 		return true;
 	}
 	
+	public void finalize()
+	{
+		System.out.println("Garbage Collector setup message socket close Attempt");
+		this.socket.close();
+	}
 }

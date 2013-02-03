@@ -14,15 +14,15 @@ public class ItunesStreamServerMain {
 	public static void main(String[] args) {
 
 
-		if(args.length == 1 )
+		if(args.length == 2 )
 		{
 			try {
 
 				String location = args[0];
-				
+				String port = args[1];
 				ItunesLibrary il = new ItunesLibrary(location);
 
-				TCPServer tcp = new TCPServer(il, 8888);
+				TCPServer tcp = new TCPServer(il, Integer.parseInt(port));
 				
 				System.out.println("Server Started");
 				tcp.start();

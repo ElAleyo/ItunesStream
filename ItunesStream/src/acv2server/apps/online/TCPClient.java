@@ -15,10 +15,10 @@ public class TCPClient {
 	private String data;
 	private int port ;
 	
-	public TCPClient( int port ) throws UnknownHostException, IOException
+	public TCPClient( int port , int responseWaitTime) throws UnknownHostException, IOException
 	{
 		this.port = port;
-		BroadcastTransmitter bt = new BroadcastTransmitter(this.port);
+		BroadcastTransmitter bt = new BroadcastTransmitter(this.port, responseWaitTime);
 		String ip = bt.getIpOfServer();
 		client = new Socket(ip, this.port);
 
