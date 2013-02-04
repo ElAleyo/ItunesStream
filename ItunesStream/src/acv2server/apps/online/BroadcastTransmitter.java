@@ -19,7 +19,8 @@ public class BroadcastTransmitter {
 	private DatagramSocket socket;
 	private int port;
 	private int responseWaitTime;
-	
+	private Object monitor = new Object();
+
 	public BroadcastTransmitter(int port, int responseWaitTime) throws SocketException
 	{
 		this.port = port;
@@ -49,7 +50,7 @@ public class BroadcastTransmitter {
 		final DatagramPacket serverResponse = new DatagramPacket(resp, resp.length);
 
 		//Create a new thread to wait for the server response
-		Thread t = new Thread(){
+		new Thread(){
 			@Override
 			public void run()
 			{
@@ -58,21 +59,24 @@ public class BroadcastTransmitter {
 				try {
 					socket.receive(serverResponse);
 					Log.d("DEBUG", "Server Response thread done");
+					synchronized (monitor) {
+						monitor.notify();
+					}
 				} catch (IOException e) {
 					Log.d("DEBUG", "Server Response error");
 					e.printStackTrace();
 				}
 
 			}
-		};
-
-
-		t.start();
+		}.start();
 
 
 		try {
-			Log.d("DEBUG", "Time to wait for response: "+responseWaitTime);
-			Thread.sleep(responseWaitTime);
+			Log.d("DEBUG", "Time to wait for response: "+responseWaitTime/1000+"'s");
+			synchronized (monitor) {
+				monitor.wait(responseWaitTime);
+			}
+			//TODO eliminate sleep for threads
 		} catch (InterruptedException e) {
 			Log.d("DEBUG", "Current Thread wait error");
 			e.printStackTrace();

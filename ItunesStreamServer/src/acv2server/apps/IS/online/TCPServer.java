@@ -25,16 +25,8 @@ public class TCPServer {
 
 	public TCPServer(ItunesLibrary il, int port) throws UnknownHostException, IOException
 	{
-		br = new BroadcastReceiver(port, new Object());
-
+		br = new BroadcastReceiver(port);
 		//If a connection is made then proceed to establish TCP Connection
-		new Thread(){
-
-			public void run() {
-
-				br.tryConnection();
-			}
-		}.start();
 
 		if(br.connectionAttempt())
 		{

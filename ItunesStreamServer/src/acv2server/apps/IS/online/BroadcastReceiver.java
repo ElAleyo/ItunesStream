@@ -17,16 +17,15 @@ public class BroadcastReceiver {
 	private DatagramSocket socket;
 	private static final int CLIENT_WAIT_TIME = 5000;
 	private boolean serverResponded = false;
-	private Object myMonitor;
+	private Object myMonitor = new Object();
 
 	/**
 	 * @throws SocketException 
 	 * 
 	 */
-	public BroadcastReceiver(int port , Object monitor) throws SocketException
+	public BroadcastReceiver(int port) throws SocketException
 	{
 		socket = new DatagramSocket(port);
-		myMonitor = monitor;
 	}
 
 	/**
@@ -35,6 +34,50 @@ public class BroadcastReceiver {
 	 */
 	public boolean connectionAttempt()
 	{
+		new Thread(){
+
+			public void run() {
+
+				try {
+					byte[] dataReceived = new byte[1024];
+					DatagramPacket messageFromClient = new DatagramPacket(dataReceived, dataReceived.length);
+
+					System.out.println("Preparing to connect to device...");
+					//This blocking operation stops the Thread until a message is received
+					socket.receive(messageFromClient);
+
+					String clientMsgString = new String(messageFromClient.getData());
+					System.out.println("Message: -" + clientMsgString +"- Received from " +messageFromClient.getAddress()+":"+messageFromClient.getPort());
+					if("set_connection_packet".equals(clientMsgString.trim()))
+					{
+						byte[] dataToSend = "dummy response msg".getBytes();
+						DatagramPacket sendServerIP = new DatagramPacket(dataToSend, dataToSend.length, messageFromClient.getAddress(), messageFromClient.getPort());
+						System.out.println("Sending response message...");
+						socket.send(sendServerIP);
+						System.out.println("Response Message sent ");
+						serverResponded = true;
+						synchronized (myMonitor) {
+							myMonitor.notify();					
+						}
+					}
+					else{
+						System.out.println("Unknown message: " + clientMsgString);
+					}
+
+				} catch (IOException e) {
+					System.out.println("Receiving message IOException");
+					e.printStackTrace();
+				}
+				finally{
+					if(socket != null)
+					{
+						socket.close();
+						System.out.println("Socket closed");
+					}
+				}
+
+			}
+		}.start();
 
 		try {
 			System.out.println("Waiting "+ CLIENT_WAIT_TIME/1000 + "'s for client broadcast message" );
@@ -58,48 +101,6 @@ public class BroadcastReceiver {
 		this.socket.close();
 	}
 
-	public void tryConnection()
-	{
-		try {
-			byte[] dataReceived = new byte[1024];
-			DatagramPacket messageFromClient = new DatagramPacket(dataReceived, dataReceived.length);
-
-			System.out.println("Preparing to connect to device...");
-			//This blocking operation stops the Thread until a message is received
-			socket.receive(messageFromClient);
-
-			String clientMsgString = new String(messageFromClient.getData());
-			System.out.println("Message: -" + clientMsgString +"- Received from " +messageFromClient.getAddress()+":"+messageFromClient.getPort());
-			if("set_connection_packet".equals(clientMsgString.trim()))
-			{
-				byte[] dataToSend = "dummy response msg".getBytes();
-				DatagramPacket sendServerIP = new DatagramPacket(dataToSend, dataToSend.length, messageFromClient.getAddress(), messageFromClient.getPort());
-				System.out.println("Sending response message...");
-				socket.send(sendServerIP);
-				System.out.println("Response Message sent ");
-				serverResponded = true;
-				synchronized (myMonitor) {
-					myMonitor.notify();					
-				}
-			}
-			else{
-				System.out.println("Unknown message: " + clientMsgString);
-			}
-
-		} catch (IOException e) {
-			System.out.println("Receiving message IOException");
-			e.printStackTrace();
-		}
-		finally{
-			if(socket != null)
-			{
-				socket.close();
-				System.out.println("Socket closed");
-			}
-		}
-
-
-	}
 
 
 }
