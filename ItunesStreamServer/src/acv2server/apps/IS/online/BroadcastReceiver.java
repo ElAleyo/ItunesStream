@@ -11,10 +11,12 @@ import java.net.SocketException;
  *
  */
 public class BroadcastReceiver {
-	
-	
+
+
 	private DatagramSocket socket;
-	
+	private static final int CLIENT_WAIT_TIME = 2000;
+	private boolean serverResponded = false;
+
 	/**
 	 * @throws SocketException 
 	 * 
@@ -23,52 +25,75 @@ public class BroadcastReceiver {
 	{
 		socket = new DatagramSocket(port);
 	}
-	
+
 	/**
 	 * 
 	 * @return true if an TCP client was found
 	 */
-	public boolean connectionAttempt()
+	public synchronized boolean connectionAttempt()
 	{
-		byte[] dataReceived = new byte[1024];
-		DatagramPacket messageFromClient = new DatagramPacket(dataReceived, dataReceived.length);
 		
 		try {
-			System.out.println("Preparing to connect to device...");
-			socket.receive(messageFromClient);
-			String clientMsgString = new String(messageFromClient.getData());
-			System.out.println("Message: -" + clientMsgString +"- Received from " +messageFromClient.getAddress()+":"+messageFromClient.getPort());
-			if("set_connection_packet".equals(clientMsgString.trim()))
-			{
-				byte[] dataToSend = "empty msg".getBytes();
-				DatagramPacket sendServerIP = new DatagramPacket(dataToSend, dataToSend.length, messageFromClient.getAddress(), messageFromClient.getPort());
-				System.out.println("Sending response message...");
-				socket.send(sendServerIP);
-				System.out.println("Response Message sent ");
-			}
-			else{
-				System.out.println("Unknown message: " + clientMsgString);
-			}
-		} catch (IOException e) {
+			System.out.println("Waiting "+ CLIENT_WAIT_TIME/1000 + "'s for client broadcast message" );
+			//Thread.sleep(CLIENT_WAIT_TIME);
 
-			System.out.println("IO Exception");
+			this.wait(CLIENT_WAIT_TIME);		
+
+		} catch (InterruptedException e) {
+			System.out.println("Sleep interrupted, Close Connection");
 			e.printStackTrace();
 			return false;
 		}
-		finally{
-			if(this.socket != null)
-			{
-				this.socket.close();
-				System.out.println("Socket closed");
-			}
-		}
-		
-		return true;
+
+		return serverResponded;
 	}
-	
+
 	public void finalize()
 	{
 		System.out.println("Garbage Collector setup message socket close Attempt");
 		this.socket.close();
 	}
+
+	public synchronized void tryConnection()
+	{
+		try {
+			byte[] dataReceived = new byte[1024];
+			DatagramPacket messageFromClient = new DatagramPacket(dataReceived, dataReceived.length);
+
+			System.out.println("Preparing to connect to device...");
+			//This blocking operation stops the Thread until a message is received
+			socket.receive(messageFromClient);
+
+			String clientMsgString = new String(messageFromClient.getData());
+			System.out.println("Message: -" + clientMsgString +"- Received from " +messageFromClient.getAddress()+":"+messageFromClient.getPort());
+			if("set_connection_packet".equals(clientMsgString.trim()))
+			{
+				byte[] dataToSend = "dummy response msg".getBytes();
+				DatagramPacket sendServerIP = new DatagramPacket(dataToSend, dataToSend.length, messageFromClient.getAddress(), messageFromClient.getPort());
+				System.out.println("Sending response message...");
+				socket.send(sendServerIP);
+				System.out.println("Response Message sent ");
+				serverResponded = true;
+				this.notify();
+			}
+			else{
+				System.out.println("Unknown message: " + clientMsgString);
+			}
+
+		} catch (IOException e) {
+			System.out.println("Receiving message IOException");
+			e.printStackTrace();
+		}
+		finally{
+			if(socket != null)
+			{
+				socket.close();
+				System.out.println("Socket closed");
+			}
+		}
+
+
+	}
+
+	
 }

@@ -22,10 +22,19 @@ public class TCPServer {
 	private int port;
 	private BroadcastReceiver br;
 
+
 	public TCPServer(ItunesLibrary il, int port) throws UnknownHostException, IOException
 	{
 		br = new BroadcastReceiver(port);
 		//If a connection is made then proceed to establish TCP Connection
+		new Thread(){
+
+			public void run() {
+
+				br.tryConnection();
+			}
+		}.start();
+
 		if(br.connectionAttempt())
 		{
 			this.il = il;
@@ -34,8 +43,10 @@ public class TCPServer {
 			server = welcomeSocket.accept();
 		}
 		else{
-			System.out.println("No Broadcast Message received");
+			System.out.println("No Broadcast Message received: Exiting application ");
+			System.exit(-1);
 		}
+
 	}
 
 
@@ -67,7 +78,7 @@ public class TCPServer {
 		server.close();
 		welcomeSocket.close();
 	}
-	
+
 	public void finalize() throws IOException
 	{
 		System.out.println("Garbage collector close attempt");
